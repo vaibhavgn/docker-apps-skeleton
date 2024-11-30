@@ -9,12 +9,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/app1db
-      - SPRING_DATASOURCE_USERNAME=app1user
-      - SPRING_DATASOURCE_PASSWORD=app1password
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/app1db
     depends_on:
-      - postgres
+      - mongo
     networks:
       - app-network
 
@@ -26,32 +23,28 @@ services:
     ports:
       - "8081:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/app2db
-      - SPRING_DATASOURCE_USERNAME=app2user
-      - SPRING_DATASOURCE_PASSWORD=app2password
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/app2db
     depends_on:
-      - postgres
+      - mongo
     networks:
       - app-network
 
-  postgres:
-    image: postgres:15-alpine
-    container_name: postgres
+  mongo:
+    image: mongo:latest
+    container_name: mongo
     ports:
-      - "5432:5432"
+      - "27017:27017"
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: rootpassword
-      POSTGRES_DB: shared_db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
     networks:
       - app-network
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mongo_data:/data/db
 
 networks:
   app-network:
     driver: bridge
 
 volumes:
-  postgres_data:
+  mongo_data:
