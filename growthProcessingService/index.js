@@ -40,7 +40,7 @@ app.get('/runGrowthService', async (req, res) => {
 
     //scraping based processing
     exampleJson = {
-        "news1_and_news2": {
+        "news": {
             "X:BTCUSD": 20,
             "X:ETHUSD": 32,
             "X:SOLUSD": 43,
@@ -94,7 +94,7 @@ function popularityBasedOnScrapping(data){
     };
     
     const result = {
-        news1_and_news2: processPopularity(data.news1_and_news2),
+        news: processPopularity(data.news),
         socialMedia: processPopularity(data.socialMedia)
     };
     
