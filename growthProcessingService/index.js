@@ -1,13 +1,24 @@
 const express = require('express');
 const axios = require('axios');
 const moment = require('moment');
+const mongoose = require('mongoose'); // need mongoose to connect to MongoDB
+const Data = require('./models/data'); // Import the model from data.js
 
 const API_KEY = "83039eaf-0bed-468c-90fe-eda73809957e";
 const URL  = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
 const URL_Quotes = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest"
+const mongoURI = process.env.MONGO_URI; // get connection string from docker-compose using the environment variable
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Connect to MongoDB
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch((err) => {
+      console.error("Error connecting to MongoDB:", err);
+      process.exit(1); // Exit the process if MongoDB connection fails
+  });
 
 let chartData = {};
 let popularityPercentages = {};
@@ -60,6 +71,17 @@ app.get('/runGrowthService', async (req, res) => {
     compiledJSON["popularityPercentages"] = popularityPercentages
     compiledJSON["latestPercentChanges"] = latestPercentChanges
     compiledJSON["chartData"] = chartData
+
+    const newData = new Data(compiledJSON);
+    // Save the data to MongoDB
+    try {
+        await newData.save();  // Save the new data document to the MongoDB database
+        console.log("Data saved to MongoDB");
+    } catch (error) {
+        console.error("Error saving data to MongoDB:", error);
+        return res.status(500).json({ error: 'Failed to save data to MongoDB' });
+    }
+    // res.status(200).send("Data saved successfully.");
     res.json(compiledJSON)
 });
 
