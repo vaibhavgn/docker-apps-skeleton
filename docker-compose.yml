@@ -8,8 +8,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/app1db
     depends_on:
       - mongo
     networks:
@@ -22,8 +20,18 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8081:8080"
-    environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/app2db
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+  growth_service:
+    container_name: growth-svc
+    build:
+      context: ./growthProcessingService
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
     depends_on:
       - mongo
     networks:
@@ -41,6 +49,7 @@ services:
       - app-network
     volumes:
       - mongo_data:/data/db
+
 
 networks:
   app-network:
