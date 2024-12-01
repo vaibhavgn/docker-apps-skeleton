@@ -1,29 +1,33 @@
 version: '3.8'
 
 services:
-  app1:
-    container_name: api-server
-    build:
-      context: ./public.api
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mongo
-    networks:
-      - app-network
+  # app1:
+  #   container_name: api-server
+  #   build:
+  #     context: ./public.api
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - mongo
+  #   networks:
+  #     - app-network
+  #   environment:
+  #     - MONGO_URI=mongodb://root:rootpassword@mongo:27017/app1db
 
-  app2:
-    container_name: 3p-retriever
-    build:
-      context: ./retriever.svc
-      dockerfile: Dockerfile
-    ports:
-      - "8081:8080"
-    depends_on:
-      - mongo
-    networks:
-      - app-network
+  # app2:
+  #   container_name: 3p-retriever
+  #   build:
+  #     context: ./retriever.svc
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8081:8080"
+  #   depends_on:
+  #     - mongo
+  #   networks:
+  #     - app-network
+  #   environment:
+  #     - MONGO_URI=mongodb://root:rootpassword@mongo:27017/app2db
 
   growth_service:
     container_name: growth-svc
@@ -36,6 +40,9 @@ services:
       - mongo
     networks:
       - app-network
+    environment:
+      - MONGO_URI=mongodb://root:rootpassword@mongo:27017/growthdb?authSource=admin
+
 
   mongo:
     image: mongo:latest
