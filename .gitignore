@@ -16,5 +16,12 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
+
+*/node_modules/*
+*DS_Store*
+
+
+*package-lock.json*
+
 .idea/
 .DS_Store
