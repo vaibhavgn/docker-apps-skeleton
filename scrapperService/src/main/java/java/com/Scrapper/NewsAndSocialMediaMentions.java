@@ -66,15 +66,25 @@ public class NewsAndSocialMediaMentions {
         Map<String, Integer> cryptoCounts = initializeCryptoCounts();
 
         try {
-            String fromDate = LocalDateTime.now().minusDays(1).format(DateTimeFormatter.ISO_DATE_TIME);
-            String url = NEWS_BASE_URL + "?q=crypto&from=" + fromDate + "&apiKey=" + NEWS_API_KEY;
 
+            // Generate the date for the last 24 hours and encode it
+            String fromDate = LocalDateTime.now().minusDays(1).format(DateTimeFormatter.ISO_DATE_TIME);
+            String encodedFromDate = URLEncoder.encode(fromDate, StandardCharsets.UTF_8);
+
+            // Construct the API URL
+            //String url = NEWS_BASE_URL + "?q=crypto&from=" + encodedFromDate + "&apiKey=" + NEWS_API_KEY;
+
+            String url = NEWS_BASE_URL + "?q=crypto+OR+cryptocurrency+OR+Bitcoin+OR+Ethereum&from=" + fromDate + "&sortBy=publishedAt&pageSize=100&apiKey=" + NEWS_API_KEY;
+            System.out.println(url);
+            System.out.println("urlxxxxx");
+            // Open connection and fetch data
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setRequestMethod("GET");
 
             int responseCode = connection.getResponseCode();
 
             if (responseCode == 200) {
+                // Parse the response
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder responseBody = new StringBuilder();
                 String line;
@@ -82,7 +92,9 @@ public class NewsAndSocialMediaMentions {
                     responseBody.append(line);
                 }
                 reader.close();
+                System.out.println("API Response: " + responseBody);
 
+                // Process the response
                 countMentionsInNews(responseBody.toString(), cryptoCounts);
             } else {
                 System.out.println("Failed to fetch NewsAPI articles. HTTP Status Code: " + responseCode);
@@ -93,6 +105,7 @@ public class NewsAndSocialMediaMentions {
 
         return cryptoCounts;
     }
+
 
     private static String getRedditAccessToken() {
         try {
@@ -260,4 +273,3 @@ public class NewsAndSocialMediaMentions {
         }
     }
 }
-
