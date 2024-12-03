@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   # app1:
@@ -57,6 +57,20 @@ services:
       - app-network
     environment:
       - MONGO_URI=mongodb://root:rootpassword@mongo:27017/growthdb?authSource=admin
+
+  scrapper_service:
+    container_name: scrapper-svc
+    build:
+      context: ./scrapperService
+      dockerfile: Dockerfile
+    environment:
+      NEWS_API_KEY: d776d7d8e45348059c7d36a238dbb971
+      REDDIT_CLIENT_ID: 208vIov8m5vJutzQZRSggA
+      REDDIT_CLIENT_SECRET: TGwF3t-gPNIcwrPz32YFlLX8v3ncyQ
+    depends_on:
+      - mongo
+    networks:
+      - app-network
 
   mongo:
     image: mongo:latest
