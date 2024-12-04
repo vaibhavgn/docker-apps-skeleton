@@ -29,48 +29,48 @@ services:
   #   environment:
   #     - MONGO_URI=mongodb://root:rootpassword@mongo:27017/app2db
 
-  growth_service:
-    container_name: growth-svc
-    build:
-      context: ./growthProcessingService
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mongo
-    networks:
-      - app-network
-    environment:
-      - MONGO_URI=mongodb://root:rootpassword@mongo:27017/growthdb?authSource=admin
-
-
-  api_server:
-    container_name: api-server
-    build:
-      context: ./apiServerService
-      dockerfile: Dockerfile
-    ports:
-      - "3001:3000"
-    depends_on:
-      - mongo
-    networks:
-      - app-network
-    environment:
-      - MONGO_URI=mongodb://root:rootpassword@mongo:27017/growthdb?authSource=admin
-
+  
+  
   scrapper_service:
     container_name: scrapper-svc
     build:
       context: ./scrapperService
       dockerfile: Dockerfile
-    environment:
-      NEWS_API_KEY: d776d7d8e45348059c7d36a238dbb971
-      REDDIT_CLIENT_ID: 208vIov8m5vJutzQZRSggA
-      REDDIT_CLIENT_SECRET: TGwF3t-gPNIcwrPz32YFlLX8v3ncyQ
-    depends_on:
-      - mongo
+    env_file:
+      - ./scrapperService/.env
     networks:
       - app-network
+    depends_on:
+      - growth_service
+
+  growth_service:
+    container_name: growth-svc
+    build:
+      context: ./growthProcessingService
+      dockerfile: Dockerfile
+    environment:
+      - MONGO_URI=mongodb://root:rootpassword@mongo:27017/growthdb?authSource=admin
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    depends_on:
+      - mongo
+
+  api_service:
+    container_name: api-server
+    build:
+      context: ./apiServerService
+      dockerfile: Dockerfile
+    environment:
+      - MONGO_URI=MONGO_URI=mongodb://root:rootpassword@mongo:27017/growthdb?authSource=admin
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    networks:
+      - app-network
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo:latest
@@ -84,7 +84,11 @@ services:
       - app-network
     volumes:
       - mongo_data:/data/db
-
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   app-network:
@@ -92,3 +96,4 @@ networks:
 
 volumes:
   mongo_data:
+
