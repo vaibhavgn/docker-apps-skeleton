@@ -79,7 +79,7 @@ app.post('/processData', async (req, res) => {
 app.get('/getDataFromDb', async (req, res) => {
     try {
         // Fetch all data from MongoDB
-        const data = await Data.find({});
+        const data = await Data.findOne({});
 
         // Check if no data is found
         if (!data || data.length === 0) {
@@ -90,10 +90,7 @@ app.get('/getDataFromDb', async (req, res) => {
         }
 
         // Send the data as JSON response
-        res.status(200).json({
-            success: true,
-            data: data,
-        });
+        res.status(200).json(data);
     } catch (err) {
         console.error('Error fetching data from MongoDB:', err.message);
 
