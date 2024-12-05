@@ -1,36 +1,7 @@
 #version: '3.8'
 
 services:
-  # app1:
-  #   container_name: api-server
-  #   build:
-  #     context: ./public.api
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - mongo
-  #   networks:
-  #     - app-network
-  #   environment:
-  #     - MONGO_URI=mongodb://root:rootpassword@mongo:27017/app1db
 
-  # app2:
-  #   container_name: 3p-retriever
-  #   build:
-  #     context: ./retriever.svc
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8081:8080"
-  #   depends_on:
-  #     - mongo
-  #   networks:
-  #     - app-network
-  #   environment:
-  #     - MONGO_URI=mongodb://root:rootpassword@mongo:27017/app2db
-
-  
-  
   scrapper_service:
     container_name: scrapper-svc
     build:
@@ -57,13 +28,23 @@ services:
     depends_on:
       - mongo
 
+  frontend_app:
+    container_name: frontend-app
+    build:
+      context: ./Frontend/cryptoboard
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+
   api_service:
     container_name: api-server
     build:
       context: ./apiServerService
       dockerfile: Dockerfile
     environment:
-      - MONGO_URI=MONGO_URI=mongodb://root:rootpassword@mongo:27017/growthdb?authSource=admin
+      - MONGO_URI=mongodb://root:rootpassword@mongo:27017/growthdb?authSource=admin
       - PORT=3001
     ports:
       - "3001:3001"

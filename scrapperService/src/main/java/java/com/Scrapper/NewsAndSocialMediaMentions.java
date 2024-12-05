@@ -26,7 +26,7 @@ public class NewsAndSocialMediaMentions {
     private static final String NEWS_BASE_URL = "https://newsapi.org/v2/everything";
     private static final String REDDIT_AUTH_URL = "https://www.reddit.com/api/v1/access_token";
     private static final String REDDIT_SEARCH_URL = "https://oauth.reddit.com/search";
-    private static final String GROWTH_SERVICE_URL = "http://growth-svc:3000/process-data";
+    private static final String GROWTH_SERVICE_URL = "http://growth-svc:3000/runGrowthService";
 
 
     private static final Map<String, List<String>> CRYPTO_KEYWORDS = Map.ofEntries(

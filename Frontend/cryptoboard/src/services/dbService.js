@@ -13,7 +13,9 @@ const cryptoList = [
 
 export const getAllCryptos = async () => {
   try {
-    const response = await fetch('http://localhost:8080/getDataFromDb');
+    const response1 = await fetch('http://api-server:3001/processData');
+
+    const response = await fetch('http://api-server:3001/getDataFromDb');
     if (!response.ok) throw new Error('Failed to fetch example.json');
 
     const jsonData = await response.json();
