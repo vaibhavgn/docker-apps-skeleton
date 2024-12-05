@@ -40,7 +40,7 @@ const CryptoDetail = () => {
   const { ticker } = useParams(); // Get ticker from URL params
   const [crypto, setCrypto] = useState(null);
   const [livePrice, setLivePrice] = useState(null);
-  const [timeRange, setTimeRange] = useState('7d'); // Default time range to 7 days
+  const [timeRange, setTimeRange] = useState('6m'); // Default time range to 6 months
   const [predictedPrices, setPredictedPrices] = useState({});
   
   const navigate = useNavigate();

@@ -8,6 +8,8 @@ const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGO_URI;
 
 app.use(express.json());
+var cors = require("cors");
+app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -17,7 +19,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
         process.exit(1); // Exit the process if MongoDB connection fails
     });
 
-app.post('/processData', async (req, res) => {
+app.get('/processData', async (req, res) => {
     try {
         // Ensure the file exists before reading
         const filePath = './data.json';

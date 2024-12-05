@@ -13,9 +13,9 @@ const cryptoList = [
 
 export const getAllCryptos = async () => {
   try {
-    const response1 = await fetch('http://api-server:3001/processData');
+    const response1 = await fetch('http://localhost:3001/processData');
 
-    const response = await fetch('http://api-server:3001/getDataFromDb');
+    const response = await fetch('http://localhost:3001/getDataFromDb');
     if (!response.ok) throw new Error('Failed to fetch example.json');
 
     const jsonData = await response.json();
@@ -27,7 +27,7 @@ export const getAllCryptos = async () => {
   const tickerKey = `X:${crypto.ticker}USD`;
   
   // Safely access chartData
-  const historicalData = jsonData.CHARTDATA?.[tickerKey];
+  const historicalData = jsonData.chartData?.[tickerKey];
   const timePrice = historicalData?.timePrice || [];
   const timeVolume = historicalData?.timeVolume || [];
 
@@ -39,10 +39,10 @@ export const getAllCryptos = async () => {
     .filter(([timestamp, volume]) => timestamp && volume)
     .map(([timestamp, volume]) => [timestamp, volume]);
 
-  const newsData = jsonData.POPULARITYPERCENTAGES?.news.find(
+  const newsData = jsonData.popularityPercentages?.news.find(
     (item) => item.key === tickerKey
   );
-  const socialMediaData = jsonData.POPULARITYPERCENTAGES?.socialMedia.find(
+  const socialMediaData = jsonData.popularityPercentages?.socialMedia.find(
     (item) => item.key === tickerKey
   );
 
@@ -51,28 +51,28 @@ export const getAllCryptos = async () => {
     chartData: validatedPriceData,
     volumeData: validatedVolumeData,
     marketStats: {
-      price: jsonData.LATESTPERCENTCHANGES?.[crypto.ticker]?.quote?.USD?.price || 0,
-      market_cap: jsonData.LATESTPERCENTCHANGES?.[crypto.ticker]?.quote?.USD?.market_cap || 0,
+      price: jsonData.latestPercentChanges?.[crypto.ticker]?.quote?.USD?.price || 0,
+      market_cap: jsonData.latestPercentChanges?.[crypto.ticker]?.quote?.USD?.market_cap || 0,
       market_cap_dominance:
-        jsonData.LATESTPERCENTCHANGES?.[crypto.ticker]?.quote?.USD?.market_cap_dominance || 0,
+        jsonData.latestPercentChanges?.[crypto.ticker]?.quote?.USD?.market_cap_dominance || 0,
       volume_24h:
-        jsonData.LATESTPERCENTCHANGES?.[crypto.ticker]?.quote?.USD?.volume_24h || 0,
+        jsonData.latestPercentChanges?.[crypto.ticker]?.quote?.USD?.volume_24h || 0,
       volume_change_24h:
-        jsonData.LATESTPERCENTCHANGES?.[crypto.ticker]?.quote?.USD?.volume_change_24h || 0,
+        jsonData.latestPercentChanges?.[crypto.ticker]?.quote?.USD?.volume_change_24h || 0,
     },
     marketPerformance: {
       percent_change_1h:
-        jsonData.LATESTPERCENTCHANGES?.[crypto.ticker]?.quote?.USD?.percent_change_1h || 0,
+        jsonData.latestPercentChanges?.[crypto.ticker]?.quote?.USD?.percent_change_1h || 0,
       percent_change_24h:
-        jsonData.LATESTPERCENTCHANGES?.[crypto.ticker]?.quote?.USD?.percent_change_24h || 0,
+        jsonData.latestPercentChanges?.[crypto.ticker]?.quote?.USD?.percent_change_24h || 0,
       percent_change_7d:
-        jsonData.LATESTPERCENTCHANGES?.[crypto.ticker]?.quote?.USD?.percent_change_7d || 0,
+        jsonData.latestPercentChanges?.[crypto.ticker]?.quote?.USD?.percent_change_7d || 0,
       percent_change_30d:
-        jsonData.LATESTPERCENTCHANGES?.[crypto.ticker]?.quote?.USD?.percent_change_30d || 0,
+        jsonData.latestPercentChanges?.[crypto.ticker]?.quote?.USD?.percent_change_30d || 0,
       percent_change_60d:
-        jsonData.LATESTPERCENTCHANGES?.[crypto.ticker]?.quote?.USD?.percent_change_60d || 0,
+        jsonData.latestPercentChanges?.[crypto.ticker]?.quote?.USD?.percent_change_60d || 0,
       percent_change_90d:
-        jsonData.LATESTPERCENTCHANGES?.[crypto.ticker]?.quote?.USD?.percent_change_90d || 0,
+        jsonData.latestPercentChanges?.[crypto.ticker]?.quote?.USD?.percent_change_90d || 0,
     },
     popularity: {
       news: newsData?.popularity || 'N/A',

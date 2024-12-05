@@ -37,6 +37,8 @@ services:
       - "8080:80"
     networks:
       - app-network
+    depends_on:
+      - api_service
 
   api_service:
     container_name: api-server

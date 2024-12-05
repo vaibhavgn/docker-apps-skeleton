@@ -12,6 +12,7 @@
     "axios": "^1.7.8",
     "express": "^4.21.1",
     "fs": "^0.0.1-security",
-    "mongoose": "^8.8.3"
+    "mongoose": "^8.8.3",
+    "cors": "^2.8.5"
   }
 }
