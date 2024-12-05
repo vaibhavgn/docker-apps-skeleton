@@ -18,12 +18,14 @@ RUN npm run build
 
 # Step 7: Use an Nginx image to serve the built app
 FROM nginx:1.25
-
 # Step 8: Copy build files to Nginx's default static folder
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Step 9: Expose the port on which the app will run
+# Step 9: Copy custom Nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Step 10: Expose the port on which the app will run
 EXPOSE 80
 
-# Step 10: Start Nginx server
+# Step 11: Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]
