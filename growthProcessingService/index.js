@@ -46,7 +46,11 @@ app.post('/process-data', async (req, res) => {
 });
 
 // Existing endpoint: Trigger Growth Service manually
-app.get('/runGrowthService', async (req, res) => {
+app.post('/runGrowthService', async (req, res) => {
+    scrapingData = {}
+    scrapingData = req.body;
+    console.log(scrapingData)
+    res.send("Growth Service activated, updating prices");
   const tickers = [
     "X:BTCUSD", "X:ETHUSD", "X:SOLUSD", 
     "X:XRPUSD", "X:DOGEUSD", "X:ADAUSD", "X:TRXUSD", 
@@ -59,34 +63,34 @@ app.get('/runGrowthService', async (req, res) => {
   }
 
   // Simulated scraping-based processing
-  const exampleJson = {
-    news: {
-      "X:BTCUSD": 20,
-      "X:ETHUSD": 32,
-      "X:SOLUSD": 43,
-      "X:XRPUSD": 9,
-      "X:DOGEUSD": 15,
-      "X:ADAUSD": 25,
-      "X:TRXUSD": 18,
-      "X:SHIBUSD": 12,
-      "X:AVAXUSD": 30,
-      "X:TONUSD": 22,
-    },
-    socialMedia: {
-      "X:BTCUSD": 50,
-      "X:ETHUSD": 45,
-      "X:SOLUSD": 33,
-      "X:XRPUSD": 27,
-      "X:DOGEUSD": 19,
-      "X:ADAUSD": 23,
-      "X:TRXUSD": 16,
-      "X:SHIBUSD": 11,
-      "X:AVAXUSD": 29,
-      "X:TONUSD": 21,
-    },
-  };
+  // const exampleJson = {
+  //   news: {
+  //     "X:BTCUSD": 20,
+  //     "X:ETHUSD": 32,
+  //     "X:SOLUSD": 43,
+  //     "X:XRPUSD": 9,
+  //     "X:DOGEUSD": 15,
+  //     "X:ADAUSD": 25,
+  //     "X:TRXUSD": 18,
+  //     "X:SHIBUSD": 12,
+  //     "X:AVAXUSD": 30,
+  //     "X:TONUSD": 22,
+  //   },
+  //   socialMedia: {
+  //     "X:BTCUSD": 50,
+  //     "X:ETHUSD": 45,
+  //     "X:SOLUSD": 33,
+  //     "X:XRPUSD": 27,
+  //     "X:DOGEUSD": 19,
+  //     "X:ADAUSD": 23,
+  //     "X:TRXUSD": 16,
+  //     "X:SHIBUSD": 11,
+  //     "X:AVAXUSD": 29,
+  //     "X:TONUSD": 21,
+  //   },
+  // };
 
-  popularityPercentages = popularityBasedOnScrapping(exampleJson);    
+  popularityPercentages = popularityBasedOnScrapping(scrapingData);    
   latestPercentChanges = await getLatestPercentageChange();
 
   const compiledJSON = {
@@ -106,7 +110,7 @@ app.get('/runGrowthService', async (req, res) => {
     return res.status(500).json({ error: 'Failed to save data to MongoDB' });
   }
 
-  res.json(compiledJSON);
+  // res.json(compiledJSON);
 });
 
 // **Helper Functions**
