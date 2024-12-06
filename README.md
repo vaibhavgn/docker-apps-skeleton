@@ -1,33 +1,34 @@
-# Docker apps Skeleton
+# Crypto Dashboard
 
 
- This repo contains a sample docker environment setup where two spring boot services interact with each other
+ This repo contains the different microservices making up the backend for the crypto dashboard and the frontend application
 
 ### Prerequisites
-You need to have docker running on your laptop and install Maven
+- maven
+  - https://maven.apache.org/download.cgi
+  - https://www.baeldung.com/install-maven-on-windows-linux-mac
+- npm
+  - https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+- docker
+  - https://www.docker.com/products/docker-desktop/
 
 ### Instructions to run
 
-cd ./public.api
-mvn clean install
+```
+cd crypto-dashboard
+```
 
-cd ./retriever.svc
-mvn clean install
-
-docker compose up --build
-
+From the crypto-dashboard directory, run the below commands
+```
+docker compose up --build --detach
+```
 
 ### To stop and clean up environment
 
-docker compose down
-
+```
+docker compose down --rmi all
+```
 
 ### Endpoints
-#### Retriever
-GET /data : returns a sample string  
-GET / : hello message  
 
-#### API server
-GET /retriever : hits the retiever api endpoint and returns that message  
-GET / : hello message  
-
+Crypto Dashboard: http://localhost:8080
